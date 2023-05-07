@@ -1,0 +1,30 @@
+pipeline {
+    
+    agent any
+            stages{
+                stage('pull code from github repo')
+{
+    steps{
+        git credentialsId: 'github', url:'git@github.com:Hruthick12/java-hello-world-with-maven.git'
+        
+    }
+}     
+stage('triggering awscodebuild project'){
+    steps {
+        awsCodeBuild artifactEncryptionDisabledOverride: '', artifactLocationOverride: '', artifactNameOverride: '', artifactNamespaceOverride: '', artifactPackagingOverride: '', artifactPathOverride: '', artifactTypeOverride: '', awsAccessKey: '', awsSecretKey: '', buildSpecFile: '', buildTimeoutOverride: '', cacheLocationOverride: '', cacheModesOverride: '', cacheTypeOverride: '', certificateOverride: '', cloudWatchLogsGroupNameOverride: '', cloudWatchLogsStatusOverride: '', cloudWatchLogsStreamNameOverride: '', computeTypeOverride: '', credentialsId: 'awscodebuild', credentialsType: 'jenkins', cwlStreamingDisabled: '', downloadArtifacts: 'false', downloadArtifactsRelativePath: '', envParameters: '', envVariables: '', environmentTypeOverride: '', exceptionFailureMode: '', gitCloneDepthOverride: '', imageOverride: '', insecureSslOverride: '', localSourcePath: '', overrideArtifactName: '', privilegedModeOverride: '', projectName: 'java-project', proxyHost: '', proxyPort: '', region: 'us-east-2', reportBuildStatusOverride: '', s3LogsEncryptionDisabledOverride: '', s3LogsLocationOverride: '', s3LogsStatusOverride: '', secondaryArtifactsOverride: '', secondarySourcesOverride: '', secondarySourcesVersionOverride: '', serviceRoleOverride: '', sourceControlType: 'jenkins', sourceLocationOverride: '', sourceTypeOverride: '', sourceVersion: '', sseAlgorithm: '', workspaceExcludes: '', workspaceIncludes: '', workspaceSubdir: ''
+    }
+}
+}
+post {
+        
+        success {
+            // sh 'echo "This Build is succesfull." | mailx -vvv -s "Build Status" hruthick167@gmail.com'
+            sh 'echo "Hi, Build is successful. Please check the below logs for the same." | mailx -vvv -s "Build logs for ${JOB_NAME}" -a /var/lib/jenkins/jobs/${JOB_NAME}/builds/${BUILD_NUMBER}/log "hruthick167@gmail.com"'
+            //emailext attachLog: true, body: 'this is test mail', subject: 'Test mail', to: 'hruthick167@gmail.com'
+             }
+             failure{
+            sh 'echo "Hi, Build is failure. Please check the below logs for the same." | mailx -vvv -s "Build logs for ${JOB_NAME}" -a /var/lib/jenkins/jobs/${JOB_NAME}/builds/${BUILD_NUMBER}/log "hruthick167@gmail.com"'
+                // sh 'echo "This Build is failed." | mailx -vvv -s "Build Status" hruthick167@gmail.com'
+             }
+             }
+    }
