@@ -35,7 +35,7 @@ pipeline {
                 }
                 }**/
                 parallel(
-                "1": {dir("dir1"){script {aws_codebuild.aws_codebuild("java-project", "us-west-1")}}},
+                "1": {dir("dir1"){script {aws_codebuild.aws_codebuild("java-project1", "us-west-1")}}},
                // "2": {dir("dir2"){script {aws_codebuild.aws_codebuild("java-project1", "us-east-2")}}}
                 )
             }
